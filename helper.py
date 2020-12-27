@@ -7,8 +7,12 @@ from linebot.exceptions import LineBotApiError
 
 
 load_dotenv()
-FSM_GRAPH_URL = os.environ.get("FSM_GRAPH_URL")
-line_bot_api = LineBotApi(os.environ.get("LINE_CHANNEL_ACCESS_TOKEN"))
+
+channel_secret = os.getenv("LINE_CHANNEL_SECRET", None)
+channel_access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", None)
+FSM_GRAPH_URL = os.getenv("FSM_GRAPH_URL")
+
+line_bot_api = LineBotApi(channel_access_token)
 
 def webhook_parser(webhook):
     event = webhook["events"][0]
@@ -27,9 +31,9 @@ class LineAPI:
         except LineBotApiError as e:
             print(e)
 
-    def send_fsm_graph(reply_token):
+    def send_fsm_graph( self,reply_token):
         try:
             # for demo, hard coded image url, line api only support image over https
-            line_bot_api.reply_message(reply_token, ImageSendMessage(original_content_url=FSM_GRAPH_URL, preview_image_url=FSM_GRAPH_URL))
+            line_bot_api.reply_message(reply_token, ImageSendMessage(original_content_url="https://12c907feb304.ngrok.io/show-fsm", preview_image_url='https://12c907feb304.ngrok.io/show-fsm'))
         except LineBotApiError as e:
             print(e)
